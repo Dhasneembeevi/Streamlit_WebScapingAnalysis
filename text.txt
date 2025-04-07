@@ -1,0 +1,29 @@
+-- movement analysis
+
+product specific sale on particular zone / branch
+voice based asisstant
+
+-- web scraping (myntra  and meesho )
+
+electronic data from flipkart, amazon, reliance digital, croma
+single page data from above websites
+
+--- meta information
+brand, product name, product ID (MODEL NUM), price (original, discounted price) 
+
+--- 4/4/25
+comparative price fixing based market sales -- price prediction report
+air conditioners -- 
+
+UI
+Search bar - url-- siteurl/modelnumber(working on - amazon,flipkart,croma)
+
+keepa.com
+
+
+pricehistory.com for flipkart
+
+
+\\--- 8/4/25
+use LLM to fetch like pass api (gemini.ai) and provide current price in all platforms 
+and predict the future price - get that response from LLM
