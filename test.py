@@ -15,7 +15,6 @@ def fetch_amazon_price(product_name):
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/122.0.0.0 Safari/537.36"
     )
-
     driver = webdriver.Chrome(options=options)
     search_query = product_name.replace(" ", "+")
     url = f"https://www.amazon.in/s?k={search_query}"
