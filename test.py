@@ -1,21 +1,72 @@
-import streamlit as st
+# import streamlit as st
+# from selenium import webdriver
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.common.by import By
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+
+# def fetch_amazon_price(product_name):
+#     options = Options()
+#     options.add_argument("--headless=new")
+#     options.add_argument("--disable-blink-features=AutomationControlled")
+#     options.add_argument("start-maximized")
+#     options.add_argument(
+#         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+#         "AppleWebKit/537.36 (KHTML, like Gecko) "
+#         "Chrome/122.0.0.0 Safari/537.36"
+#     )
+#     driver = webdriver.Chrome(options=options)
+#     search_query = product_name.replace(" ", "+")
+#     url = f"https://www.amazon.in/s?k={search_query}"
+#     driver.get(url)
+
+#     try:
+#         WebDriverWait(driver, 10).until(
+#             EC.presence_of_element_located((By.CSS_SELECTOR, 'div.s-main-slot div[data-component-type="s-search-result"]'))
+#         )
+#         results = driver.find_elements(By.CSS_SELECTOR, 'div.s-main-slot div[data-component-type="s-search-result"]')
+
+#         for item in results:
+#             try:
+#                 title = item.find_element(By.CSS_SELECTOR, "h2 span").text
+#                 price_whole = item.find_element(By.CSS_SELECTOR, "span.a-price-whole").text
+#                 try:
+#                     price_fraction = item.find_element(By.CSS_SELECTOR, "span.a-price-fraction").text
+#                 except:
+#                     price_fraction = "00"
+#                 price = f"₹{price_whole}.{price_fraction}"
+#                 driver.quit()
+#                 return price
+#             except:
+#                 continue
+
+#         driver.quit()
+#         return "Price not found"
+#     except Exception as e:
+#         driver.quit()
+#         return "Failed to fetch page"
+import os
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import streamlit as st
 def fetch_amazon_price(product_name):
     options = Options()
-    options.add_argument("--headless=new")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("start-maximized")
-    options.add_argument(
-        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/122.0.0.0 Safari/537.36"
-    )
-    driver = webdriver.Chrome(options=options)
+    options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--window-size=1920,1080")
+    options.binary_location = "/usr/bin/chromium-browser"  # Path in Streamlit Cloud
+
+    chrome_driver_path = "/usr/bin/chromedriver"  # Path in Streamlit Cloud
+    service = Service(chrome_driver_path)
+
+    driver = webdriver.Chrome(service=service, options=options)
+
     search_query = product_name.replace(" ", "+")
     url = f"https://www.amazon.in/s?k={search_query}"
     driver.get(url)
@@ -30,10 +81,7 @@ def fetch_amazon_price(product_name):
             try:
                 title = item.find_element(By.CSS_SELECTOR, "h2 span").text
                 price_whole = item.find_element(By.CSS_SELECTOR, "span.a-price-whole").text
-                try:
-                    price_fraction = item.find_element(By.CSS_SELECTOR, "span.a-price-fraction").text
-                except:
-                    price_fraction = "00"
+                price_fraction = item.find_element(By.CSS_SELECTOR, "span.a-price-fraction").text if item.find_elements(By.CSS_SELECTOR, "span.a-price-fraction") else "00"
                 price = f"₹{price_whole}.{price_fraction}"
                 driver.quit()
                 return price
@@ -44,7 +92,7 @@ def fetch_amazon_price(product_name):
         return "Price not found"
     except Exception as e:
         driver.quit()
-        return "Failed to fetch page"
+        return f"Failed to fetch page: {str(e)}"
 
 def fetch_flipkart_price(product_name):
     options = Options()
