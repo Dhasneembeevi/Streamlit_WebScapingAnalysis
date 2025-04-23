@@ -27,3 +27,9 @@ pricehistory.com for flipkart
 \\--- 8/4/25
 use LLM to fetch like pass api (gemini.ai) and provide current price in all platforms 
 and predict the future price - get that response from LLM
+
+In React App, use FastAPI and fetch current prices and deploy in netify or rvercel
+
+fetch current price, discounted percent, mrp also
+
+store data in supabase --- refer github main.py file
